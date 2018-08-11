@@ -2,6 +2,8 @@ import { Controller, Get, Post, HttpCode, Body } from '@nestjs/common';
 import { HeroesService } from './heroes.service';
 import { Hero } from './hero/hero.interface';
 import { HeroDto } from './hero/hero.dto';
+import { MessagePattern } from '@nestjs/microservices';
+import { Observable, of } from 'rxjs';
 
 @Controller('heroes')
 export class HeroesController {
@@ -17,5 +19,11 @@ export class HeroesController {
     @Get()
     findAll(): Promise<Hero[]>{
         return this.heroesService.findAll();
+    }
+
+    @MessagePattern({cmd : 'findOne'})
+    findById(data: String): Observable<any>{
+        console.log('hero requested');
+        return of(this.heroesService.findById(data));
     }
 }
