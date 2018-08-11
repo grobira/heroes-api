@@ -21,9 +21,8 @@ export class HeroesController {
         return this.heroesService.findAll();
     }
 
-    @MessagePattern({cmd : 'findOne'})
+    @MessagePattern({ cmd: 'findOne' })
     findById(data: String): Observable<any>{
-        console.log('hero requested');
-        return of(this.heroesService.findById(data));
+        return this.heroesService.findById(data);
     }
 }

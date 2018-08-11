@@ -3,7 +3,6 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Hero } from './hero/hero.interface';
 import { Model } from 'mongoose';
 import { HeroDto } from './hero/hero.dto';
-import { HeroSchema } from './hero/hero.schema';
 import { Observable, of } from 'rxjs';
 
 @Injectable()
@@ -20,8 +19,8 @@ export class HeroesService {
         return await this.heroModel.find().exec();
     }
 
-    findById(id: String): Hero{
-        return this.heroModel.findById(id);
+    findById(id: String): Observable<any>{
+        return this.heroModel.findOne({_id: id}).exec();
     }
 
     createHero(heroDto: HeroDto): Model<Hero>{
