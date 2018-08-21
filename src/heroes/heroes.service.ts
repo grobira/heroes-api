@@ -4,8 +4,8 @@ import { Hero } from './hero/hero.interface';
 import { Model } from 'mongoose';
 import { HeroDto } from './hero/hero.dto';
 import { Observable, of } from 'rxjs';
-import { ClassesService } from 'classes/classes.service';
-import { BreedsService } from 'breeds/breeds.service';
+import { ClassesService } from '../classes/classes.service';
+import { BreedsService } from '../breeds/breeds.service';
 
 @Injectable()
 export class HeroesService {
