@@ -22,7 +22,7 @@ export class HeroesController {
     }
 
     @MessagePattern({ cmd: 'findOne' })
-    findById(data: String): Observable<any>{
+    findById(data: string): Observable<any>{
         return this.heroesService.findById(data);
     }
 }

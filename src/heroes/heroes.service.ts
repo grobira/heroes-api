@@ -23,7 +23,7 @@ export class HeroesService {
         return await this.heroModel.find().exec();
     }
 
-    findById(id: String): Observable<any>{
+    findById(id: string): Observable<any>{
         return this.heroModel.findOne({_id: id}).exec();
     }
 
