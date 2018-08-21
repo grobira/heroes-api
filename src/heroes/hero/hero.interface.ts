@@ -1,28 +1,28 @@
 import { Document } from 'mongoose';
 
 export interface Hero extends Document {
-    firstname: String,
+    firstname: string,
 
-    lastname: String,
+    lastname: string,
 
-    hp: Number, 
+    hp: number, 
 
     status: {
-        str : Number,
-        int: Number,
-        lck: Number,
-        dex: Number
+        str : number,
+        int: number,
+        lck: number,
+        dex: number
     },
 
-    class: String,
+    class: string,
 
-    breed: String,
+    breed: string,
 
     multipliers: {
-        hp : Number,
-        str : Number,
-        int: Number,
-        lck: Number,
-        dex: Number
+        hp : number,
+        str : number,
+        int: number,
+        lck: number,
+        dex: number
     }
 }

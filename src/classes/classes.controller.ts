@@ -1,4 +1,4 @@
-import { Controller, Post } from "../../node_modules/@nestjs/common";
+import { Controller, Post, Get } from "../../node_modules/@nestjs/common";
 import { ClassesService } from "./classes.service";
 
 
@@ -14,6 +14,15 @@ export class ClassesController{
             ];
 
     constructor(private readonly classesService: ClassesService){}
+
+    @Get('/')
+    getAllClass(): Promise<any>{
+        return this.classesService.findAll();
+    }
+
+    getClass(className: string): Promise<any>{
+        return this.classesService.findByName(className);
+    }
 
     @Post('init')
     async init(): Promise<any>{

@@ -4,14 +4,18 @@ import { Hero } from './hero/hero.interface';
 import { Model } from 'mongoose';
 import { HeroDto } from './hero/hero.dto';
 import { Observable, of } from 'rxjs';
+import { ClassesService } from 'classes/classes.service';
+import { BreedsService } from 'breeds/breeds.service';
 
 @Injectable()
 export class HeroesService {
 
-    constructor(@InjectModel('Hero') private readonly heroModel: Model<Hero>) {}
+    constructor(@InjectModel('Hero') private readonly heroModel: Model<Hero>, 
+                        private readonly classesService: ClassesService,
+                        private readonly breedsService: BreedsService) {}
     
     async create(heroDto: HeroDto): Promise<Hero> {
-        const newHero = new this.heroModel(this.createHero(heroDto));
+        const newHero = new this.heroModel(await this.createHero(heroDto));
         return await newHero.save();
     }
 
@@ -23,18 +27,18 @@ export class HeroesService {
         return this.heroModel.findOne({_id: id}).exec();
     }
 
-    createHero(heroDto: HeroDto): Model<Hero>{
-        const newHero : Model<Hero> = 
-            {
+    async createHero(heroDto: HeroDto): Promise<any>{
+        let newHero  = {
+                hp: await this.getHeroHP(heroDto),
+                multipliers: await this.getHeroMulp(heroDto),
                 firstname : heroDto.firstname,
                 lastname : heroDto.lastname,
                 class: heroDto.class,
                 breed: heroDto.breed,
-                status : heroDto.status,
-                hp: this.getHeroHP(heroDto),
-                multipliers: this.getHeroMulp(heroDto)
+                status : heroDto.status
             };
 
+        newHero.status = this.applyMult(newHero.status, newHero.multipliers);
         return newHero;
     }
 
@@ -42,20 +46,35 @@ export class HeroesService {
         let hp : number = 0;
         let baseHP : number = 1500;
 
-        hp =  (heroDto.status.str * 1000) + (heroDto.status.dex) * 50 + (heroDto.status.int * 40) ;
+        hp =  (heroDto.status.str * 100) + (heroDto.status.dex) * 50 + (heroDto.status.int * 40) ;
 
         hp = (hp + baseHP);
 
         return hp;
     }
 
-    getHeroMulp(heroDto: HeroDto): any {
+    async getHeroMulp(heroDto: HeroDto): Promise<any>{
+        let classMulp;
+        let breedMulp;
+        classMulp = await this.classesService.findByName(heroDto.class);
+        breedMulp = await this.breedsService.findByName(heroDto.breed)
+        
         return {
-            hp : 1,
-            str: 1,
-            int: 1,
-            lck: 1,
-            dex: 1,
+            "hp": 1 + classMulp.mult.hp + breedMulp.mult.hp,
+            "str": 1 + classMulp.mult.str + breedMulp.mult.str,
+            "int": 1 + classMulp.mult.int + breedMulp.mult.int,
+            "lck": 1 + classMulp.mult.lck + breedMulp.mult.lck,
+            "dex": 1 + classMulp.mult.dex + breedMulp.mult.dex,
+        }
+    }
+
+    applyMult(status, mult){
+        return {
+            "hp" : status.hp * mult.hp,
+            "str": status.str * mult.str,
+            "int": status.int * mult.int,
+            "lck": status.lck * mult.lck,
+            "dex": status.dex * mult.dex
         }
     }
     

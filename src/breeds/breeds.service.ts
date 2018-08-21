@@ -15,7 +15,7 @@ export class BreedsService{
         return await createdBreed.save();
     }
 
-    async find(breedName : String): Promise<Breed>{
+    async findByName(breedName : String): Promise<Breed>{
         return await this.breedModel.findOne({name : breedName});
     }
 

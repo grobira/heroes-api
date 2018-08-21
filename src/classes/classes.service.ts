@@ -15,7 +15,7 @@ export class ClassesService{
         return await createdClass.save();
     }
 
-    async find(className : String): Promise<Class>{
+    async findByName(className : String): Promise<Class>{
         return await this.classModel.findOne({name : className});
     }
 
