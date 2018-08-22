@@ -19,5 +19,13 @@ export class HeroDto {
         int: number;
         lck: number;
         dex: number
-    }
+    };
+    readonly strAtk: {
+        damage: number,
+        odds: number
+    };
+    readonly intAtk: {
+        damage: number,
+        odds: number
+    };
 }

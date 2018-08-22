@@ -25,4 +25,13 @@ export interface Hero extends Document {
         lck: number,
         dex: number
     }
+
+    strAtk: {
+        damage: number,
+        odds: number
+    },
+    intAtk: {
+        damage: number,
+        odds: number
+    }
 }

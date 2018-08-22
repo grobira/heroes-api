@@ -8,5 +8,13 @@ export class ClassDto {
         int: Number,
         lck: Number,
         dex: Number
+    };
+    readonly strAtk: {
+        damage: Number,
+        odds: Number
+    };
+    readonly intAtk: {
+        damage: Number,
+        odds: Number
     }
 }

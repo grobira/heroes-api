@@ -28,14 +28,18 @@ export class HeroesService {
     }
 
     async createHero(heroDto: HeroDto): Promise<any>{
+        let heroClass = await this.classesService.findByName(heroDto.class);
+        let heroBreed = await this.breedsService.findByName(heroDto.breed);
         let newHero  = {
+                multipliers: await this.getHeroMulp(heroDto, heroClass, heroBreed),
                 hp: await this.getHeroHP(heroDto),
-                multipliers: await this.getHeroMulp(heroDto),
                 firstname : heroDto.firstname,
                 lastname : heroDto.lastname,
                 class: heroDto.class,
                 breed: heroDto.breed,
-                status : heroDto.status
+                status : heroDto.status,
+                strAtk : await this.getHeroStrAtk(heroClass, heroBreed),
+                intAtk : await this.getHeroIntAtk(heroClass, heroBreed)
             };
 
         newHero.status = this.applyMult(newHero.status, newHero.multipliers);
@@ -46,25 +50,20 @@ export class HeroesService {
         let hp : number = 0;
         let baseHP : number = 1500;
 
-        hp =  (heroDto.status.str * 100) + (heroDto.status.dex) * 50 + (heroDto.status.int * 40) ;
+        hp =  (heroDto.status.str * 100) + (heroDto.status.dex) * 50 + (heroDto.status.int * 10) ;
 
         hp = (hp + baseHP);
 
         return hp;
     }
 
-    async getHeroMulp(heroDto: HeroDto): Promise<any>{
-        let classMulp;
-        let breedMulp;
-        classMulp = await this.classesService.findByName(heroDto.class);
-        breedMulp = await this.breedsService.findByName(heroDto.breed)
-        
+    async getHeroMulp(heroDto: HeroDto, heroClass, heroBreed): Promise<any>{
         return {
-            "hp": 1 + classMulp.mult.hp + breedMulp.mult.hp,
-            "str": 1 + classMulp.mult.str + breedMulp.mult.str,
-            "int": 1 + classMulp.mult.int + breedMulp.mult.int,
-            "lck": 1 + classMulp.mult.lck + breedMulp.mult.lck,
-            "dex": 1 + classMulp.mult.dex + breedMulp.mult.dex,
+            "hp": 1 + heroClass.mult.hp + heroBreed.mult.hp,
+            "str": 1 + heroClass.mult.str + heroBreed.mult.str,
+            "int": 1 + heroClass.mult.int + heroBreed.mult.int,
+            "lck": 1 + heroClass.mult.lck + heroBreed.mult.lck,
+            "dex": 1 + heroClass.mult.dex + heroBreed.mult.dex,
         }
     }
 
@@ -75,6 +74,20 @@ export class HeroesService {
             "int": status.int * mult.int,
             "lck": status.lck * mult.lck,
             "dex": status.dex * mult.dex
+        }
+    }
+
+    async getHeroStrAtk(heroClass, heroBreed): Promise<any>{
+        return {
+            "damage": heroClass.strAtk.damage + heroBreed.strAtk.damage,
+            "odds": (heroClass.strAtk.odds + heroBreed.strAtk.odds)/2
+        }
+    }
+
+    async getHeroIntAtk(heroClass, heroBreed): Promise<any>{
+         return {
+            "damage": heroClass.intAtk.damage + heroBreed.intAtk.damage,
+            "odds": (heroClass.intAtk.odds + heroBreed.intAtk.odds)/2
         }
     }
     

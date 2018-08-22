@@ -24,5 +24,14 @@ export const HeroSchema = new mongoose.Schema({
         int: Number,
         lck: Number,
         dex: Number
+    },
+
+    strAtk: {
+        damage: Number,
+        odds: Number
+    },
+    intAtk: {
+        damage: Number,
+        odds: Number
     }
 });

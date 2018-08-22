@@ -8,5 +8,13 @@ export interface Class extends Document{
         int: number,
         lck: number,
         dex: number
+    },
+    strAtk: {
+        damage: number,
+        odds: number
+    },
+    intAtk: {
+        damage: number,
+        odds: number
     }
 }

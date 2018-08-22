@@ -9,4 +9,12 @@ export class BreedDto {
         lck: Number,
         dex: Number
     }
+    readonly strAtk: {
+        damage: Number,
+        odds: Number
+    };
+    readonly intAtk: {
+        damage: Number,
+        odds: Number
+    }
 }
