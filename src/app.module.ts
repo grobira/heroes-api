@@ -5,6 +5,6 @@ import { BreedsModule } from './breeds/breeds.module';
 import { ClassesModule } from './classes/classes.module';
 
 @Module({
-  imports: [HeroesModule, BreedsModule, ClassesModule, MongooseModule.forRoot('mongodb://localhost:27017/heroes')]
+  imports: [HeroesModule, BreedsModule, ClassesModule, MongooseModule.forRoot('mongodb://mongodb:27017/heroes')]
 })
 export class AppModule {}

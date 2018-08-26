@@ -1,0 +1,35 @@
+version: '2'
+services:
+  node:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    volumes:
+      - .:/hero-api
+    image: 
+      hero-crud
+    ports: 
+      - "3000:3001"
+    links:
+      - mongodb
+    depends_on:
+      - mongodb
+    networks:
+      - heroes
+  
+  mongodb:
+    image: mongo:latest
+    ports:
+      - 27017:27017
+    volumes:
+      - mongodb_data:/data/db
+    networks:
+      - heroes
+
+networks:
+  heroes:
+    driver: bridge
+
+volumes:
+  mongodb_data:
+    external: true
