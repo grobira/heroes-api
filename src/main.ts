@@ -14,6 +14,7 @@ async function bootstrap() {
   });
 
   app.use(morgan('combined'));
+  app.enableCors();
 
   await app.startAllMicroservicesAsync();
   await app.listen(3001);
