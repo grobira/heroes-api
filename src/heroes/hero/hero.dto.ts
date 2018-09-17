@@ -13,7 +13,6 @@ export class HeroDto {
     @IsString()
     readonly breed: string;
 
-    @IsDefined()
     readonly status: {
         str : number;
         int: number;

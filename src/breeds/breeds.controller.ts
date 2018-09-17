@@ -23,7 +23,7 @@ export class BreedsController{
     }
 
     @Get('/')
-    async findAll(): Promise<any>{
+    getAllBreeds(): Promise<any>{
         return this.breedsService.findAll();
     }
 }
