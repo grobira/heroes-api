@@ -1,4 +1,4 @@
-import { Controller, Post } from "../../node_modules/@nestjs/common";
+import { Controller, Post, Get } from "../../node_modules/@nestjs/common";
 import { BreedsService } from "./breeds.service";
 
 
@@ -20,5 +20,10 @@ export class BreedsController{
         this.breeds.map(classType => {
             this.breedsService.create(classType);
         });
+    }
+
+    @Get('/')
+    getAllBreeds(): Promise<any>{
+        return this.breedsService.findAll();
     }
 }

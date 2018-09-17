@@ -32,7 +32,7 @@ export class HeroesService {
         let heroBreed = await this.breedsService.findByName(heroDto.breed);
         let newHero  = {
                 multipliers: this.getHeroMulp(heroClass, heroBreed),
-                hp: this.getHeroHP(heroDto),
+                hp: this.getHeroHP(heroDto, heroClass, heroBreed),
                 firstname : heroDto.firstname,
                 lastname : heroDto.lastname,
                 class: heroDto.class,
@@ -43,23 +43,23 @@ export class HeroesService {
             };
 
         newHero.status = this.applyMult(newHero.status, newHero.multipliers);
+
         return newHero;
     }
 
-    getHeroHP(heroDto: HeroDto): number{
+    getHeroHP(heroDto: HeroDto, heroClass, heroBreed): number{
         let hp : number = 0;
         let baseHP : number = 1500;
 
         hp =  (heroDto.status.str * 100) + (heroDto.status.dex) * 50 + (heroDto.status.int * 10) ;
 
-        hp = (hp + baseHP);
+        hp = (hp + baseHP)* (1 + heroClass.mult.hp + heroBreed.mult.hp);
 
         return hp;
     }
 
-    async getHeroMulp(heroClass, heroBreed): Promise<any>{
+    getHeroMulp(heroClass, heroBreed){
         return {
-            "hp": 1 + heroClass.mult.hp + heroBreed.mult.hp,
             "str": 1 + heroClass.mult.str + heroBreed.mult.str,
             "int": 1 + heroClass.mult.int + heroBreed.mult.int,
             "lck": 1 + heroClass.mult.lck + heroBreed.mult.lck,
@@ -69,7 +69,6 @@ export class HeroesService {
 
     applyMult(status, mult){
         return {
-            "hp" : status.hp * mult.hp,
             "str": status.str * mult.str,
             "int": status.int * mult.int,
             "lck": status.lck * mult.lck,
@@ -77,14 +76,14 @@ export class HeroesService {
         }
     }
 
-    async getHeroStrAtk(heroClass, heroBreed){
+    getHeroStrAtk(heroClass, heroBreed){
         return {
             "damage": heroClass.strAtk.damage + heroBreed.strAtk.damage,
             "odds": (heroClass.strAtk.odds + heroBreed.strAtk.odds)/2
         }
     }
 
-    async getHeroIntAtk(heroClass, heroBreed){
+    getHeroIntAtk(heroClass, heroBreed){
          return {
             "damage": heroClass.intAtk.damage + heroBreed.intAtk.damage,
             "odds": (heroClass.intAtk.odds + heroBreed.intAtk.odds)/2
